@@ -29,8 +29,21 @@ class AlumnoController extends Controller
      */
     public function store(Request $request)
     {
-        $alumno = Alumno::create($request->all());
-        return redirect()->route('alumnos.index');
+        $data = $request->validate([
+            'nie' => 'required|string|unique:alumnos,nie',
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'edad' => 'required|integer|min:1',
+            'sexo' => 'nullable|in:M,F',
+            'direccion' => 'nullable|string|max:255',
+            'telefono' => 'nullable|string|max:100',
+            'email' => 'nullable|email|unique:alumnos,email',
+            'responsable' => 'nullable|string|max:255',
+        ]);
+
+        Alumno::create($data);
+
+        return redirect()->route('alumnos.index')->with('success', 'Alumno creado correctamente.');
     }
 
     /**
@@ -56,8 +69,21 @@ class AlumnoController extends Controller
     public function update(Request $request, $id)
     {
         $alumno = Alumno::findOrFail($id);
-        $alumno->update($request->all());
-        return redirect()->route('alumnos.index');
+        $data = $request->validate([
+            'nie' => 'required|string|unique:alumnos,nie,' . $id,
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'edad' => 'required|integer|min:1',
+            'sexo' => 'nullable|in:M,F',
+            'direccion' => 'nullable|string|max:255',
+            'telefono' => 'nullable|string|max:100',
+            'email' => 'nullable|email|unique:alumnos,email,' . $id,
+            'responsable' => 'nullable|string|max:255',
+        ]);
+
+        $alumno->update($data);
+
+        return redirect()->route('alumnos.index')->with('success', 'Alumno actualizado correctamente.');
     }
 
     /**

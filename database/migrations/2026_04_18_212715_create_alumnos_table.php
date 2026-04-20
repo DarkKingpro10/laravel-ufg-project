@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('edad');
             $table->string('sexo');
             $table->string('direccion');
-            $table->string('telefgono');
+            $table->string('telefono');
             $table->string('email')->unique();
             $table->string('responsable');
             $table->timestamps();

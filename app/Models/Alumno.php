@@ -14,6 +14,7 @@ class Alumno extends Model
         'sexo',
         'direccion',
         'telefono',
+        'telefono',
         'email',
         'responsable'
     ];
