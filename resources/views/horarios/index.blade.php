@@ -42,6 +42,7 @@
                 <td>{{ $h->hora_fin }}</td>
                 <td>{{ $h->aula }}</td>
                 <td>
+                    <a href="{{ route('horarios.edit', $h->id) }}" class="btn btn-sm btn-secondary me-1">Editar</a>
                     <form action="{{ route('horarios.destroy',$h->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Eliminar?')">
                         @csrf @method('DELETE')
                         <button class="btn btn-sm btn-danger">Eliminar</button>

@@ -13,6 +13,6 @@ Route::get('/', function () {
 Route::resource('alumnos', AlumnoController::class);
 Route::resource('docentes', DocenteController::class);
 Route::resource('materias', MateriaController::class);
-Route::resource('horarios', HorarioController::class)->except(['create', 'show', 'edit', 'update']);
+Route::resource('horarios', HorarioController::class)->except(['create', 'show']);
 Route::get('horarios/inscribir', [HorarioController::class, 'inscribirForm'])->name('horarios.inscribir');
 Route::post('horarios/inscribir', [HorarioController::class, 'store'])->name('horarios.store');

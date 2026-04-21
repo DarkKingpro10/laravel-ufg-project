@@ -87,4 +87,57 @@ class HorarioController extends Controller
         Horario::destroy($id);
         return redirect()->route('horarios.index')->with('success', 'Horario eliminado.');
     }
+
+    public function edit($id)
+    {
+        $horario = Horario::findOrFail($id);
+        $docentes = Docente::all();
+        $materias = Materia::all();
+        $dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        return view('horarios.edit', compact('horario', 'docentes', 'materias', 'dias'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'docente_id' => 'required|exists:docentes,id',
+            'materia_id' => 'required|exists:materias,id',
+            'dia' => 'required|string',
+            'hora_inicio' => 'required|date_format:H:i',
+            'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
+            'aula' => 'nullable|string|max:50',
+        ]);
+
+        $horario = Horario::findOrFail($id);
+
+        // Si cambiamos de docente, validar límite de 5
+        if ($horario->docente_id != $request->docente_id) {
+            $count = Horario::where('docente_id', $request->docente_id)->count();
+            if ($count >= 5) {
+                return back()->withErrors(['docente_id' => 'El docente seleccionado ya tiene 5 materias.'])->withInput();
+            }
+        }
+
+        // Validar conflicto global (excluir el propio registro)
+        $conflict = Horario::where('dia', $request->dia)
+            ->where('id', '<>', $horario->id)
+            ->where(function ($q) use ($request) {
+                $q->where('hora_inicio', '<', $request->hora_fin)
+                    ->where('hora_fin', '>', $request->hora_inicio);
+            })->exists();
+
+        if ($conflict) {
+            return back()->withErrors(['conflict' => 'Conflicto de horario detectado.'])->withInput();
+        }
+
+        $horario->docente_id = $request->docente_id;
+        $horario->materia_id = $request->materia_id;
+        $horario->dia = $request->dia;
+        $horario->hora_inicio = $request->hora_inicio;
+        $horario->hora_fin = $request->hora_fin;
+        $horario->aula = $request->aula;
+        $horario->save();
+
+        return redirect()->route('horarios.index')->with('success', 'Horario actualizado.');
+    }
 }
