@@ -25,6 +25,7 @@
                         <ul class="dropdown-menu" aria-labelledby="catalogsDropdown">
                             <li><a class="dropdown-item" href="{{ route('docentes.index') }}">Docentes</a></li>
                             <li><a class="dropdown-item" href="{{ route('materias.index') }}">Materias</a></li>
+                            <li><a class="dropdown-item" href="{{ route('carreras.index') }}">Carreras</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -32,6 +33,13 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('horarios.index') }}">Horarios</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="inscripcionesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Inscripciones</a>
+                        <ul class="dropdown-menu" aria-labelledby="inscripcionesDropdown">
+                            <li><a class="dropdown-item" href="{{ route('inscripciones.index') }}">Carreras</a></li>
+                            <li><a class="dropdown-item" href="{{ route('inscripcion-materia.index') }}">Materias</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>

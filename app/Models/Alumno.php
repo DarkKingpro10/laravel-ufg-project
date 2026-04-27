@@ -14,8 +14,12 @@ class Alumno extends Model
         'sexo',
         'direccion',
         'telefono',
-        'telefono',
         'email',
         'responsable'
     ];
+
+    public function carreras()
+    {
+        return $this->belongsToMany(Carrera::class, 'alumno_carrera')->withTimestamps();
+    }
 }
