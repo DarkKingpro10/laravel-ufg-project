@@ -6,6 +6,7 @@ use App\Models\Alumno;
 use App\Models\Horario;
 use App\Models\Ciclo;
 use App\Models\InscripcionMateria;
+use App\Models\Nota;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -95,11 +96,25 @@ class InscripcionMateriaController extends Controller
             // eliminar actuales para ese alumno/ciclo
             InscripcionMateria::where('alumno_id', $alumnoId)->where('ciclo_id', $cicloId)->delete();
             foreach ($horarioIds as $hid) {
-                InscripcionMateria::create([
+                $ins = InscripcionMateria::create([
                     'alumno_id' => $alumnoId,
                     'horario_id' => $hid,
                     'ciclo_id' => $cicloId
                 ]);
+                // crear fila de notas con valores por defecto (0)
+                Nota::firstOrCreate(
+                    ['inscripcion_id' => $ins->id],
+                    [
+                        'lab_p1' => 0,
+                        'parc_p1' => 0,
+                        'lab_p2' => 0,
+                        'parc_p2' => 0,
+                        'lab_p3' => 0,
+                        'parc_p3' => 0,
+                        'lab_p4' => 0,
+                        'parc_p4' => 0
+                    ]
+                );
             }
         });
 
@@ -169,11 +184,25 @@ class InscripcionMateriaController extends Controller
         // insertar en transacción
         DB::transaction(function () use ($alumnoId, $cicloId, $horarioIds) {
             foreach ($horarioIds as $hid) {
-                InscripcionMateria::firstOrCreate([
+                $ins = InscripcionMateria::firstOrCreate([
                     'alumno_id' => $alumnoId,
                     'horario_id' => $hid,
                     'ciclo_id' => $cicloId
                 ]);
+                // ensure nota exists with zeros
+                Nota::firstOrCreate(
+                    ['inscripcion_id' => $ins->id],
+                    [
+                        'lab_p1' => 0,
+                        'parc_p1' => 0,
+                        'lab_p2' => 0,
+                        'parc_p2' => 0,
+                        'lab_p3' => 0,
+                        'parc_p3' => 0,
+                        'lab_p4' => 0,
+                        'parc_p4' => 0
+                    ]
+                );
             }
         });
 

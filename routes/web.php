@@ -7,6 +7,7 @@ use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\InscripcionMateriaController;
+use App\Http\Controllers\NotaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,3 +29,10 @@ Route::delete('inscripciones/{id}', [CarreraController::class, 'destroyInscripci
 Route::resource('inscripcion-materia', InscripcionMateriaController::class)->except(['show']);
 Route::get('inscripcion-materia/alumno/{alumno}', [InscripcionMateriaController::class, 'manageAlumno'])->name('inscripcion-materia.manageAlumno');
 Route::post('inscripcion-materia/alumno', [InscripcionMateriaController::class, 'storeAlumno'])->name('inscripcion-materia.storeAlumno');
+
+// Notas
+Route::resource('notas', NotaController::class)->only(['index', 'edit', 'update']);
+Route::get('notas/alumno/{alumno}', [NotaController::class, 'manageAlumno'])->name('notas.manageAlumno');
+Route::post('notas/alumno', [NotaController::class, 'storeAlumno'])->name('notas.storeAlumno');
+// populate missing notas for existing inscripciones
+Route::post('notas/populate', [NotaController::class, 'populate'])->name('notas.populate');

@@ -32,6 +32,9 @@
                         <a class="nav-link" href="{{ route('alumnos.index') }}">Alumnos</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('notas.index') }}">Notas</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('horarios.index') }}">Horarios</a>
                     </li>
                     <li class="nav-item dropdown">
